@@ -60,9 +60,8 @@ RUN chmod +x src/ros_tcp_endpoint/src/ros_tcp_endpoint/*.py
 # COPY ./GUI/ $ROS_WORKSPACE/src/locchallbench/gui/
 
 WORKDIR $ROS_WORKSPACE/
-COPY ./set-up-workspace ./setup.sh
-WORKDIR $ROS_WORKSPACE/
-RUN chmod +x ./setup.sh && ./setup.sh 
+COPY ./set-up-workspace /setup.sh
+RUN chmod +x /setup.sh && /setup.sh 
 
 ## Hector Slam 
 RUN apt-get install -y ros-melodic-hector-slam
@@ -74,7 +73,7 @@ RUN git clone https://github.com/MAPIRlab/rf2o_laser_odometry $ROS_WORKSPACE/src
 RUN apt-get install -y ros-melodic-scan-tools
 
 # Catkin_make 
-WORKDIR $ROS_WORKSPACE/
-RUN  ./setup.sh && rm ./setup.sh
+
+RUN  /setup.sh && rm /setup.sh
 
 
