@@ -72,7 +72,7 @@ RUN git clone https://github.com/MAPIRlab/rf2o_laser_odometry $ROS_WORKSPACE/src
 RUN apt-get install -y ros-melodic-scan-tools
 
 # Catkin_make 
-WORKDIR $ROS_WORKSPACE
+WORKDIR $ROS_WORKSPACE/
 RUN  /setup.sh && rm /setup.sh
 
 
