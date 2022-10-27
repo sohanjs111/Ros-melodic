@@ -59,6 +59,7 @@ RUN chmod +x src/ros_tcp_endpoint/src/ros_tcp_endpoint/*.py
 # RUN git clone https://github.com/florianspy/locchallbench $ROS_WORKSPACE/src/locchallbench
 # COPY ./GUI/ $ROS_WORKSPACE/src/locchallbench/gui/
 
+WORKDIR $ROS_WORKSPACE/
 COPY ./set-up-workspace /setup.sh
 RUN chmod +x /setup.sh && /setup.sh 
 
