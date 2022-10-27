@@ -1,5 +1,7 @@
 # Ros-melodic
+Ros melodic docker was installed as per the need of the Bachelor Thesis at FHWS for Evaluating the performance on LiDAR-based Algorithms. 
 
+## FHWS
 First time installation run Steps 1 and 2. Later on, Follow only steps 3 to 6 
 
 1. Build Docker Image
