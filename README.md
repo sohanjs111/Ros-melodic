@@ -1,5 +1,6 @@
 # Ros-melodic
 Ros melodic docker was installed as per the need of the Bachelor Thesis at FHWS for Evaluating the performance on LiDAR-based Algorithms. 
+To install simple Ros melodic Docker without LiDAR-Based Alogrithms, please switch to simple - branch. 
 
 ## FHWS
 First time installation run Steps 1 and 2. Later on, Follow only steps 3 to 6 
@@ -28,4 +29,15 @@ docker exec -it ros-melodic bash
   ```
   docker stop melodic
   ```
+
+## Master 
+It installs the following for ROS melodic Docker 
+* ROS-TCP-Endpoint for connecting ROS with Unity 
+* Hector slam 
+* Rf2o laser odometry
+* Laser Scan Matcher 
+
+## Simple 
+It installs the following for ROS melodic Docker 
+* ROS-TCP-Endpoint for connecting ROS with Unity 
 
