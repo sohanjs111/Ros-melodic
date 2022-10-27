@@ -28,9 +28,6 @@ ENV ROS_WORKSPACE=/home/catkin_ws
 COPY ./ros_packages/ $ROS_WORKSPACE/src/
 RUN git clone https://github.com/Unity-Technologies/ROS-TCP-Endpoint $ROS_WORKSPACE/src/ros_tcp_endpoint -b v0.7.0
 
-## rf2o 
-RUN git clone https://github.com/MAPIRlab/rf2o_laser_odometry
-
 COPY ./set-up-workspace /setup.sh
 RUN chmod +x /setup.sh && /setup.sh 
 
@@ -43,14 +40,3 @@ RUN echo "source /home/catkin_ws/devel/setup.bash" >> ~/.bashrc
 # making sure the file modes are executable
 RUN chmod +x src/ros_tcp_endpoint/src/ros_tcp_endpoint/*.py
 
-
-## Hector Slam 
-RUN apt-get install -y ros-melodic-hector-slam
-
-
-## Laser Scan 
-RUN apt-get install -y ros-melodic-scan-tools
-
-
-# Catkin_make 
-RUN  /setup.sh && rm /setup.sh
