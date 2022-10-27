@@ -61,6 +61,7 @@ RUN chmod +x src/ros_tcp_endpoint/src/ros_tcp_endpoint/*.py
 
 WORKDIR $ROS_WORKSPACE/
 COPY ./set-up-workspace /setup.sh
+RUN sed -i -e 's/\r$//' /setup.sh
 RUN chmod +x /setup.sh && /setup.sh 
 
 ## Hector Slam 
