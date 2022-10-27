@@ -61,7 +61,7 @@ RUN chmod +x src/ros_tcp_endpoint/src/ros_tcp_endpoint/*.py
 
 WORKDIR $ROS_WORKSPACE/
 COPY ./set-up-workspace /setup.sh
-RUN chmod +x /setup.sh && /setup.sh 
+RUN chmod +x ./setup.sh && ./setup.sh 
 
 ## Hector Slam 
 RUN apt-get install -y ros-melodic-hector-slam
@@ -74,6 +74,6 @@ RUN apt-get install -y ros-melodic-scan-tools
 
 # Catkin_make 
 WORKDIR $ROS_WORKSPACE/
-RUN  /setup.sh && rm /setup.sh
+RUN  ./setup.sh && rm ./setup.sh
 
 
