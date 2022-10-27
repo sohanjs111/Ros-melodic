@@ -60,7 +60,7 @@ RUN chmod +x src/ros_tcp_endpoint/src/ros_tcp_endpoint/*.py
 # COPY ./GUI/ $ROS_WORKSPACE/src/locchallbench/gui/
 
 WORKDIR $ROS_WORKSPACE/
-COPY ./set-up-workspace /setup.sh
+COPY ./set-up-workspace ./setup.sh
 RUN chmod +x ./setup.sh && ./setup.sh 
 
 ## Hector Slam 
