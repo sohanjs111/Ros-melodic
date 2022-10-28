@@ -3,6 +3,8 @@ Ros melodic docker was installed as per the need of the Bachelor Thesis at FHWS 
 To install simple Ros melodic Docker without LiDAR-Based Alogrithms, please switch to simple - branch. 
 
 ## FHWS
+
+First clone the repo and move into the repo. Then follow the following steps for installation
 First time installation run Steps 1 and 2. Later on, Follow only steps 3 to 6 
 
 1. Build Docker Image
