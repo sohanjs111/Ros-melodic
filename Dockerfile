@@ -28,6 +28,9 @@ ENV ROS_WORKSPACE=/home/catkin_ws
 COPY ./ros_packages/ $ROS_WORKSPACE/src/
 RUN git clone https://github.com/Unity-Technologies/ROS-TCP-Endpoint $ROS_WORKSPACE/src/ros_tcp_endpoint -b v0.7.0
 
+# Install teleop
+RUN apt-get install ros-melodic-teleop-twist-keyboard
+
 COPY ./set-up-workspace /setup.sh
 RUN sed -i -e 's/\r$//' /setup.sh
 RUN chmod +x /setup.sh && /setup.sh 
