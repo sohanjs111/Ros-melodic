@@ -13,15 +13,15 @@ docker build -t ros-melodic .
 ```
 2. Run the Docker container 
 ```
-docker run -dt --name ros-melodic -p 10000:10000 ros-melodic
+docker run -dt --name melodic -p 10000:10000 ros-melodic
 ```
 3. If the Docker conatiner is not running, Only then run the command below
 ```
-docker start ros-melodic
+docker start melodic
 ```
 4. To get into the container  
 ```
-docker exec -it ros-melodic bash
+docker exec -it melodic bash
 ```
 5. To exit the container after use
   ```
@@ -35,6 +35,7 @@ docker exec -it ros-melodic bash
 ## Master 
 It installs the following for ROS melodic Docker 
 * ROS-TCP-Endpoint for connecting ROS with Unity 
+* Teleop Twist Keyboard
 * Hector slam 
 * Rf2o laser odometry
 * Laser Scan Matcher 
@@ -42,4 +43,4 @@ It installs the following for ROS melodic Docker
 ## Simple 
 It installs the following for ROS melodic Docker 
 * ROS-TCP-Endpoint for connecting ROS with Unity 
-
+* Teleop Twist Keyboard

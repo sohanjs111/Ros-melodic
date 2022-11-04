@@ -1,0 +1,25 @@
+<launch>
+  <arg name="IS_TWISTSTAMPED" default="true" />
+  <arg name="use_rviz" default="false" />
+  <arg name="publish_covariance" default="false"/>
+  <param name="/stamped_vel" value="$(arg IS_TWISTSTAMPED)"/>
+  <group if="$(arg use_rviz)">
+    <node pkg="rviz" type="rviz" name="rviz"
+          args="-d $(find laser_scan_matcher)/demo/demo.rviz"/>
+  </group>
+  #### start the laser scan_matcher ##############################
+  <group if="$(arg publish_covariance)">
+    <param name="laser_scan_matcher_node/do_compute_covariance" value="1"/>
+    <param name="laser_scan_matcher_node/publish_pose_with_covariance" value="true"/>
+    <param name="laser_scan_matcher_node/publish_pose_with_covariance_stamped" value="true"/>
+  </group>
+  <node pkg="laser_scan_matcher" type="laser_scan_matcher_node" name="laser_scan_matcher_node" output="screen">
+	<param name="scantopic" value="/scan_front"/>
+	<param name="use_odom" value="false"/>
+	<param name="use_imu" value="false"/>
+	<param name="publish_pose_stamped" value="true"/>
+
+	<param name="max_iterations" value="10"/>
+  </node>
+
+</launch>

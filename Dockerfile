@@ -29,7 +29,11 @@ COPY ./ros_packages/ $ROS_WORKSPACE/src/
 RUN git clone https://github.com/Unity-Technologies/ROS-TCP-Endpoint $ROS_WORKSPACE/src/ros_tcp_endpoint -b v0.7.0
 
 # Install teleop
-RUN apt-get install ros-melodic-teleop-twist-keyboard
+RUN apt update
+RUN apt-get install -y ros-melodic-teleop-twist-keyboard
+
+# pcl_ros
+RUN apt install -y ros-melodic-pcl-ros
 
 WORKDIR $ROS_WORKSPACE
 
@@ -68,16 +72,26 @@ RUN sed -i -e 's/\r$//' /setup.sh
 RUN chmod +x /setup.sh && /setup.sh 
 
 ## Hector Slam 
+RUN apt update
 RUN apt-get install -y ros-melodic-hector-slam
+WORKDIR $ROS_WORKSPACE/src/
+RUN mkdir -p aros/launch/
+COPY ./launch/hectormapping_default.launch ./aros/launch/
 
 ## rf2o 
 RUN git clone https://github.com/MAPIRlab/rf2o_laser_odometry $ROS_WORKSPACE/src/rf2o_laser_odometry
+WORKDIR $ROS_WORKSPACE/src/
+COPY ./launch/rf2o_laser_odometry.launch ./rf2o_laser_odometry/launch/
 
 ## Laser Scan 
-RUN apt-get install -y ros-melodic-scan-tools
+RUN git clone https://github.com/CCNYRoboticsLab/scan_tools $ROS_WORKSPACE/src/scan_tools
+RUN apt update
+RUN apt-get install -y ros-melodic-csm
+WORKDIR $ROS_WORKSPACE/src/
+COPY ./launch/laser_scan_ma.launch ./scan_tools/laser_scan_matcher/demo/
 
 # Catkin_make 
+RUN /setup.sh && rm /setup.sh
 
-RUN  /setup.sh && rm /setup.sh
 
 
