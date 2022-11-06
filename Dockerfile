@@ -93,5 +93,15 @@ COPY ./launch/laser_scan_ma.launch ./scan_tools/laser_scan_matcher/demo/
 # Catkin_make 
 RUN /setup.sh && rm /setup.sh
 
+# xterm 
+RUN apt update && apt install xterm
 
+# add the evaluation file
+WORKDIR $ROS_WORKSPACE/src/
+RUN mkdir Rosbags
+COPY ./evaluation ./evaluation
+WORKDIR $ROS_WORKSPACE/src/evaluation/
+RUN sed -i -e 's/\r$//' /shell.sh
 
+# Catkin_make 
+RUN /setup.sh && rm /setup.sh
