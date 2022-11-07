@@ -101,7 +101,7 @@ WORKDIR $ROS_WORKSPACE/src/
 RUN mkdir Rosbags
 COPY ./evaluation ./evaluation
 WORKDIR $ROS_WORKSPACE/src/evaluation/
-RUN sed -i -e 's/\r$//' /shell.sh
+RUN sed -i -e 's/\r$//' ./shell.sh
 
 # install necessary packages for the shell file 
 RUN apt update && apt install ros-melodic-tf2-geometry-msgs
