@@ -91,7 +91,7 @@ WORKDIR $ROS_WORKSPACE/src/
 COPY ./launch/laser_scan_ma.launch ./scan_tools/laser_scan_matcher/demo/
 
 # Catkin_make 
-RUN /setup.sh && rm /setup.sh
+RUN /setup.sh 
 
 # xterm 
 RUN apt update && apt install xterm
