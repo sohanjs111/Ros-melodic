@@ -105,7 +105,7 @@ RUN sed -i -e 's/\r$//' ./shell.sh
 
 # install necessary packages for the shell file 
 RUN apt update && apt install ros-melodic-tf2-geometry-msgs
-RUN apt apt-get install bc 
+RUN apt install bc 
 
 # Catkin_make 
 RUN /setup.sh && rm /setup.sh
