@@ -2,6 +2,8 @@
 # generated from docker_images/create_ros_image.Dockerfile.em
 FROM ros:melodic-ros-core-bionic
 
+LABEL key="value"
+
 # install bootstrap tools
 RUN apt-get update && apt-get install --no-install-recommends -y \
     build-essential \
@@ -44,27 +46,6 @@ RUN echo "source /home/catkin_ws/devel/setup.bash" >> ~/.bashrc
 # making sure the file modes are executable
 RUN chmod +x src/ros_tcp_endpoint/src/ros_tcp_endpoint/*.py
 
-# install python 
-# RUN apt update \
-#     && apt install -y software-properties-common 
-# RUN apt autoremove -y -f python
-# RUN add-apt-repository ppa:deadsnakes/ppa -y
-# RUN apt update && apt install -y python3.7
-
-# install pip 
-# RUN apt-get update 
-# RUN apt-get install -y python3-pip 
-# RUN apt-get install -y python3-tk 
-
-# RUN pip3 install easydict 
-# RUN pip3 install PySimpleGUIQt 
-# RUN pip3 install matplotlib 
-# RUN pip3 install setuptools 
-# RUN pip3 install mplcursors 
-
-# GUI 
-# RUN git clone https://github.com/florianspy/locchallbench $ROS_WORKSPACE/src/locchallbench
-# COPY ./GUI/ $ROS_WORKSPACE/src/locchallbench/gui/
 
 WORKDIR $ROS_WORKSPACE/
 COPY ./set-up-workspace /setup.sh
