@@ -41,6 +41,17 @@ WORKDIR $ROS_WORKSPACE
 RUN echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
 RUN echo "source /home/catkin_ws/devel/setup.bash" >> ~/.bashrc
 
+## rqt-graph 
+RUN apt update 
+RUN apt install -y ros-melodic-rqt 
+RUN apt install -y ros-melodic-rqt-graph 
+RUN apt install -y ros-melodic-rqt-common-plugins
+
+# xterm 
+RUN apt update && apt install xterm
+
 # making sure the file modes are executable
 RUN chmod +x src/ros_tcp_endpoint/src/ros_tcp_endpoint/*.py
 
+# Catkin_make 
+RUN /setup.sh 
