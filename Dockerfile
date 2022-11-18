@@ -113,5 +113,7 @@ RUN sed -i -e 's/\r$//' ./shell.sh
 RUN apt update && apt install ros-melodic-tf2-geometry-msgs
 RUN apt install bc 
 
+WORKDIR $ROS_WORKSPACE/src/
+
 # Catkin_make 
 RUN /setup.sh && rm /setup.sh
