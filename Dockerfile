@@ -90,6 +90,12 @@ RUN apt-get install -y ros-melodic-csm
 WORKDIR $ROS_WORKSPACE/src/
 COPY ./launch/laser_scan_ma.launch ./scan_tools/laser_scan_matcher/demo/
 
+## rqt-graph 
+RUN apt update 
+RUN apt install -y ros-melodic-rqt 
+RUN apt install -y ros-melodic-rqt-graph 
+RUN apt install -y ros-melodic-rqt-common-plugins
+
 # Catkin_make 
 RUN /setup.sh 
 
@@ -106,6 +112,8 @@ RUN sed -i -e 's/\r$//' ./shell.sh
 # install necessary packages for the shell file 
 RUN apt update && apt install ros-melodic-tf2-geometry-msgs
 RUN apt install bc 
+
+WORKDIR $ROS_WORKSPACE/src/
 
 # Catkin_make 
 RUN /setup.sh && rm /setup.sh

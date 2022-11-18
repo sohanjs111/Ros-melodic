@@ -4,19 +4,19 @@
 #for fast evaluation of just one dataset with one algorithm
 #roscore started for every run new
 #where you want the data to be stored
-destinationfolder=/home/catkin_ws/src/evaluation
+destinationfolder=~/catkin_ws/src/evaluation
 #where keypoint.py is located and all the other python files should be located here, broad.py, and the compiled version of remap.cpp the compile guide is in the wiki
-sourcefolder=/home/catkin_ws/src/evaluation
+sourcefolder=~/catkin_ws/src/evaluation
 #where launch files we additionally use lay down
-additionlaunchfolder=/home/catkin_ws/src/aros/launch
+additionlaunchfolder=~/catkin_ws/src/aros/launch
 #path to bags
-bagfolder=/home/catkin_ws/src/Rosbags
+bagfolder=~/catkin_ws/src/Rosbags
 #your rosbags
 AR=("$bagfolder/lidarchallenge.bag" "$bagfolder/bestcase.bag")
-#length of the bagfiles change 
+#length of the bagfiles change
 ARL=(40 79)
 #set to 1 if you want to skip a bag in the list
-skipbag=(1 0)
+skipbag=(0 1)
 numbag=${#AR[@]}
 #folder of your maps
 mapfolder=/home/meow/share/unity
@@ -24,7 +24,8 @@ mapfolder=/home/meow/share/unity
 map=("$mapfolder/0-hectormap-0.yaml" "$mapfolder/mymap.yaml")
 #need to be specified to by the user contains the gt for this rosbag, if you have just a csv file you can generate the file by running gttofile.py 
 gtfile=("$bagfolder/lidarchallengegt.txt" "$bagfolder/bestcasegt.txt")
-#this file will be generated when you set getf to 1 in this script and contains transformations
+#this file will be generated when you set getf to 1 in this script and contains transformations it contains transformation from map / ground truth coordinate system into the base_link of the robot
+#only after applying this tf you can compare algorithm performance with ground truth
 tffile=("$sourcefolder/tflidarchallenge.txt" "$sourcefolder/tfbestcase.txt")
 #to get the tf (transformation) data and the initialstate of odometry into a file run the script with getf=1 with your dataset once and look inside tf file given above in tffile list
 #To get initalstate we take the first odometry value of the bag and take x,y,z and qx qy qz qw convert to roll pitch yaw 
@@ -35,14 +36,44 @@ tffile=("$sourcefolder/tflidarchallenge.txt" "$sourcefolder/tfbestcase.txt")
 #The functionality to set the ekf to the inital value is enable via ekf_template.yaml file which is used by ekf_template2.launch
 #if you want to get the transforms maptoodom maptopose set getf to 1 then it will generate the tffile for you which will be used if you set getf to zero
 #this requires to have a rosbag and the corresponding gtfile generate with the command given in the line above gtfile 
-getf=1
+getf=0
+#the following a robot specific transformations to the sensors
+#tf from baselink to imu
+basetoimu=('"1579261351.192527056, 0.0, 0.0, 0.0, 0, 0, 0, 1"')
+#tf from base to camera
+#for evo including the transform from mount to camera_link which is 0.32489658647, 0.0149604650214, 0.21267098693, 0, 0, 0, 1 
+#for unity sim it is 0.45, 0.0, -0.11, 0, 0, 0, 1"
+basetocam=('"1579261351.192527056, 0.45, 0.0, -0.11, 0, 0, 0, 1"')
+#tf from base to camera_floor
+# for evo the transform from mount to camera_floor which is 0, 0, 0.08, -0.707106781185 ,0.707106781188 , 0, 0
+basetofloorcam=('"1579261351.192527056, 0.45, 0.0, -0.11, 0, 0, 0, 1"')
+#for evo cortex (real robot) it is , 0.35, -0.26, 0.06, 0, 0, -0.39497015, 0.9186395"
+#for unity sim it is '"1579261351.192527056, 0.0, 0.0, 0.64, 0, 0, 0, 1"'
+basetolidar=('"1579261351.192527056, 0.35, -0.26, 0.06, 0, 0, -0.39497015, 0.9186395"')
+#basetolidar=('"1579261351.192527056, 0.0, 0.0, 0.64, 0, 0, 0, 1"')
 #we can keep the camera data to zeros and avoid by this having to apply this tf on the gt data to get gt in base_footprint
 #for evo including the transform from mount to camera_link which is 0.0 0.0175 0.0125
 #adjust the below transformation to match your setup
 camtoopt=('"1579261351.192527056, 0.0, 0.0, 0.0, 0, 0, 0, 1"')
-basetoimu=('"1579261351.192527056, 0.0, 0.0, 0.0, 0, 0, 0, 1"')
-basetocam=('"1579261351.192527056, 0.45, 0.0, -0.11, 0, 0, 0, 1"')
-basetolidar=('"1579261351.192527056, 0.0, 0.0, 0.64, 0, 0, 0, 1"')
+#tf from cameralink to imu optical frame
+#for the realsense it is 0.0117399999872, 0.00552000012249, -0.00510000018403, -0.5, 0.5, -0.5, 0.5
+#for unity it is 0.0, 0.0, 0.0, 0, 0, 0, 1
+camtoimuopt=('"1579261351.192527056, 0.0, 0.0, 0.0, 0, 0, 0, 1"')
+#tf from cameralink to depth optical frame
+#for evo including the transform from mount to camera_link which is 0, 0, 0, -0.5, 0.5, -0.5, 0.5
+#for unity it is 0, 0, 0, 0, 0, 0, 1
+camtodepthopt=('"1579261351.192527056, 0.0, 0.0, 0.0, 0, 0, 0, 1"')
+#tf from cameralink to aligned depth optical frame
+#for realsense it is -0.00010341352754 0.0149604650214 0.000170986939338 -0.00894242804497 0.00165949144866 0.00163967593107 0.99995726347
+#for unity it is 0, 0, 0, 0, 0, 0, 1
+camtoalddopt=('"1579261351.192527056, 0.0, 0.0, 0.0, 0, 0, 0, 1"')
+#tf from aligned depth optical frame to camera_color_optical_frame 
+# for realsense it is 0 0 0 -0.5, 0.5, -0.5, 0.5
+aligneddepthopttocolorframe=('"1579261351.192527056, 0.0, 0.0, 0.0, -0.5, 0.5, -0.5, 0.5"')
+#tf from cameralink to color frame
+#for realsense it is -0.00010341352754  0.0149604650214 0.000170986939338 -0.00894242804497 0.00165949144866 0.00163967593107 0.99995726347 or 0.0, 0.0,0.0, -0.5, -0.5, -0.5, 0.5 (when looking at tf used in old broad.py
+#for the unity it is 0 0 0 0 0 0 1
+camtocolorframe=('"1579261351.192527056, 0.0, 0.0, 0.0, 0, 0, 0, 1"')
 #amount of repetitions
 maxrep=1
 #delay of bag to enable subscribers to register to topics 
@@ -56,7 +87,7 @@ algnam=('wheelodom' 'lidarhector' 'amcl' 'lidargmap' 'rtabmap' 'ekfall' 'orb' 'i
 #if the order above is changed changes need to be made to keypoint.py and keypoint.py as well for odom i set mal to 0 but also passed 3 to keypoint cause gmapping was running it.
 mal=-1
 #which algorithm to skip set entry in this list to 1
-skip=(1 1 1 1 1 1 1 1 1 1 0)
+skip=(1 1 1 1 1 1 1 1 1 0 1)
 if (( $getf == 1))
 then
 for ((idx=0; idx<$numbag; idx++))
@@ -133,8 +164,10 @@ do
 			xterm -hold -e "rostopic echo /camera/depth_registered/image_rect_raw/header" &
 			myBackgroundXtermPID6=$!
 		fi
-		xterm -hold -e "rosparam set use_sim_time false;python $sourcefolder/broad.py 0" &
-		myBackgroundXtermPID1=$!     
+		echo ${camtocoloropt}
+		xterm -hold -e "rosparam set use_sim_time false;python $sourcefolder/broad.py 0 ${basetocam} ${basetolidar} ${basetoimu} ${camtoimuopt} ${camtodepthopt} ${camtoalddopt} ${camtocolorframe} ${aligneddepthopttocolorframe}" & 
+		#xterm -hold -e "rosparam set use_sim_time true;python $sourcefolder/broad.py 0" &
+		myBackgroundXtermPID1=$!
 		amcladdsid=$myBackgroundXtermPID1
 		ekf1id=$myBackgroundXtermPID1
 		ekf2id=$myBackgroundXtermPID1
@@ -153,8 +186,8 @@ do
 		#for hectorslam
 		if (($k == 1))
 		then
-			xterm -hold -e "python $sourcefolder/wheel.py ${maptopose[0]} ${odomtobasefoot[0]} ${basetoimu} 0 ${mal}" &
-			myBackgroundXtermPID6=$!   
+			#xterm -hold -e "python $sourcefolder/wheel.py ${maptopose[0]} ${odomtobasefoot[0]} ${basetoimu} 0 ${mal}" &
+			#myBackgroundXtermPID6=$!
 			a="roslaunch $additionlaunchfolder/hectormapping_default.launch"
 		fi
 		#for amcl
@@ -168,7 +201,7 @@ do
 		if (($k == 3))
 		then
  			xterm -hold -e "python $sourcefolder/wheel.py ${maptopose[0]} ${odomtobasefoot[0]} ${basetoimu} 1 ${mal}" &
-			myBackgroundXtermPID6=$!  
+			myBackgroundXtermPID6=$!
 			a="roslaunch $additionlaunchfolder/gmap.launch"  
 		fi
 		#for rtabmap
@@ -183,12 +216,12 @@ do
 		then
 			xterm -hold -e "python $sourcefolder/wheel.py ${maptopose[0]} ${odomtobasefoot[0]} ${basetoimu} 0 ${mal}" &
 			ekf1id=$!
-			xterm -hold -e "roslaunch realsense2_camera opensource_tracking2.launch" &    
-			ekf3id=$!   
-			xterm -hold -e "roslaunch rtabmap_ros rtabmap.launch" &    
-			ekf4id=$!              
-			xterm -e "roslaunch $additionlaunchfolder/gmap.launch"  &
-			amcladdsid=$!                      
+			xterm -hold -e "roslaunch realsense2_camera opensource_tracking2.launch" &
+			ekf3id=$!
+			xterm -hold -e "roslaunch rtabmap_ros rtabmap.launch" &
+			ekf4id=$!
+			xterm -e "roslaunch $additionlaunchfolder/gmap.launch" &
+			amcladdsid=$!
 			scaleFactor=1.25
 			nLevels=8
 			iniThFast=20
@@ -201,12 +234,12 @@ do
 			#so when editing stuff for the config also of the one topic apply the same changes to the conf to the topic vop	
 			#initalstate is already in odom frame. all others are currently transformed into odom and then passed to ekf 	   
 			xterm -hold -e "roslaunch robot_localization ekf_template2.launch inital:='$initalstate'" &
-			ekfPID=$!   
+			ekfPID=$!
 		fi 
 		#for orbslam
 		if (($k == 6))
 		then
-			#seems to be essential otherwise orbslam seems to stop publishing 		    
+			#seems to be essential otherwise orbslam seems to stop publishing
 			scaleFactor=1.25
 			nLevels=8
 			iniThFast=6
@@ -216,7 +249,7 @@ do
 			sleep 2
 			a="roslaunch orb_slam2_ros orb_slam2_d435_rgbd.launch"
 			xterm -hold -e "python $sourcefolder/wheel.py ${maptopose[0]} ${odomtobasefoot[0]} ${basetoimu} 1 ${mal}" &
-			myBackgroundXtermPID6=$!  
+			myBackgroundXtermPID6=$!
 		fi
 		#for imu
 		if (($k == 7))
@@ -246,7 +279,6 @@ do
 		then
 			a="roslaunch laser_scan_matcher laser_scan_ma.launch"
 		fi
-		echo $k
 		#if you have issues with keypoint.py check first that the tf file is there otherwise the parameters below will not be provided correctly
 		xterm -hold -e "python $sourcefolder/keypoint.py 0 ${maptoodom[0]} ${maptopose[0]} ${odomtobasefoot[0]} ${camtoopt} ${basetolidar} $k $mal ${basetocam}" &
 		myBackgroundXtermPID0=$!
@@ -258,7 +290,7 @@ do
 		remap=$!
 		#play the rosbag
 		xterm -hold -e "rosparam set use_sim_time true;rosbag play -k --clock -d ${delay} -r ${rate[k]} ${AR[idx]} /odom:=/odomc" &
-		rosbagPID5=$! 	
+		rosbagPID5=$!
 		#https://unix.stackexchange.com/questions/89712/how-to-convert-floating-point-number-to-integer  
 		#the bonus of one seconds ensures that rounding problems from calculation of the time of the bagplay will not have an effect
 		sleptim=$(echo "(${ARL[idx]}+1)/${rate[k]}"|bc ) 
@@ -346,7 +378,6 @@ do
 		then
 			mv $sourcefolder/laserscan.txt "$destinationfolder/$idx-laserscan-$rep.txt"
 		fi
-
 		kill $ID
 		kill $myBackgroundXtermPID0
 		kill $myBackgroundXtermPID1
