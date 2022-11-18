@@ -35,11 +35,15 @@ docker exec -it melodic bash
   ```
 ### Xterm
 For using rqt_graph and xterm, one needs to download [Xlaunch](https://sourceforge.net/projects/vcxsrv/) on for windows. Execute VcxSrv before running xterm or rqt_graph in the container. 
+1. Exectue Xlaunch from program files  
 ![Exectue Xlaunch](https://github.com/sohanjs111/Ros-melodic/blob/master/Images/vcxsrv.PNG)
+2. 
+![click next](https://github.com/sohanjs111/Ros-melodic/blob/master/Images/vcxsrv2.PNG)
+3. Make sure to check "*Disable Access Control*".
+![click next](https://github.com/sohanjs111/Ros-melodic/blob/master/Images/vcxsrv3.PNG)
+4. Then click Finish. 
 
-Make sure to check "*Disable Access Control*" and then click Finish. 
-
-
+Now the xterm or rqt_graph should work
 ## Branches 
 ### Master 
 It installs the following for ROS melodic Docker 
