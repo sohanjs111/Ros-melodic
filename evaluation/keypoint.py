@@ -172,10 +172,10 @@ def generatetffromodommgs(msg):
 	trans4.transform.translation.z=checkfornan(msg.pose.pose.position.z)
 	if math.isnan(msg.pose.pose.orientation.x) and math.isnan(msg.pose.pose.orientation.y) and math.isnan(msg.pose.pose.orientation.z) and math.isnan(msg.pose.pose.orientation.w):
 		quaternion = tf.transformations.quaternion_from_euler(0, 0, 0)
-		trans4.transform.rotation.x=quaternion[0]	
-		trans4.transform.rotation.y=quaternion[1]	
-		trans4.transform.rotation.z=quaternion[2]	
-		trans4.transform.rotation.w=quaternion[3]	
+		trans4.transform.rotation.x=quaternion[0]
+		trans4.transform.rotation.y=quaternion[1]
+		trans4.transform.rotation.z=quaternion[2]
+		trans4.transform.rotation.w=quaternion[3]
 	else:
 		trans4.transform.rotation.x=checkfornan(msg.pose.pose.orientation.x)
 		trans4.transform.rotation.y=checkfornan(msg.pose.pose.orientation.y)
@@ -242,21 +242,23 @@ def removefile(name):
 #it will only use the rotation yaw part of the pose
 def writeposetofile(filename,posetowrite,fromcam):
 	angles = tf.transformations.euler_from_quaternion([posetowrite.pose.orientation.x, posetowrite.pose.orientation.y, posetowrite.pose.orientation.z, posetowrite.pose.orientation.w])
+	print(angles)
 	#necessary because the visual camera system applied a -3.14 ... rotation we reverse it here 
 	additionalrot=0
 	if fromcam == 1:
 		additionalrot=+3.1415926535897931/2
 	quat = tf.transformations.quaternion_from_euler(0,0,angles[2]+additionalrot) 
-	qx =   quat[0]   
-	qy =   quat[1]  
-	qz =   quat[2]  
-	qw =   quat[3] 
+	qx =quat[0]
+	qy =quat[1]
+	qz =quat[2]
+	qw =quat[3]
 	writetofile(filename,posetowrite.header.stamp,posetowrite.pose.position.x,posetowrite.pose.position.y,posetowrite.pose.position.z,qx,qy,qz,qw)
 #write to a file x,y,z etc data
 def writetofile(filename,stamp,x,y,z,qx,qy,qz,qw):
-		with open (path+"/"+filename,"a") as odom_pose_file:
-			odom_pose_file.write(str(stamp.secs)+"."+str(stamp.nsecs).zfill(9)+ "   "+str(format(x,'.11f'))+ "   " +str(format(y,'.11f'))+"   "+str(format(z,'.11f'))+"   "+str(format(qx,'.11f'))+"   "+str(format(qy,'.11f'))+"   "+str(format(qz,'.11f'))+"   "+str(format(qw,'.11f'))+"\n")
-		print("Position for "+filename+": "+str(x)+" "+str(y)+" "+str(z)+" "+str(qx)+" "+str(qy)+" "+str(qz)+" "+str(qw))
+	print(x,y,z,str(format(x,'.11f')),str(stamp.secs),str(stamp.nsecs).zfill(9))
+	with open (path+"/"+filename,"a") as odom_pose_file:
+		odom_pose_file.write(str(stamp.secs)+"."+str(stamp.nsecs).zfill(9)+ "   "+str(format(x,'.11f'))+ "   " +str(format(y,'.11f'))+"   "+str(format(z,'.11f'))+"   "+str(format(qx,'.11f'))+"   "+str(format(qy,'.11f'))+"   "+str(format(qz,'.11f'))+"   "+str(format(qw,'.11f'))+"\n")
+	print("Position for "+filename+": "+str(x)+" "+str(y)+" "+str(z)+" "+str(qx)+" "+str(qy)+" "+str(qz)+" "+str(qw))
 #workaround cause our writetotffile function only takes pose message to store the trans and rot data of our transformation generateposefromtf
 def filltfintoposewithoutinver(tf):
 	odomtfaspose = PoseStamped()
@@ -281,12 +283,12 @@ def genandpubposewcovinodomfrombasefootmsg(tfodomtobase,msg,cam,cov,pub1):
 	additionalrot=0
 	if cam == 1:
 		additionalrot=+3.1415926535897931/2
-	quat = tf.transformations.quaternion_from_euler(0,0,angles[2]+additionalrot)	  
+	quat = tf.transformations.quaternion_from_euler(0,0,angles[2]+additionalrot)
 	posCovMsg.pose.pose.position = pose_transformed.pose.position
 	posCovMsg.pose.pose.orientation.x = quat[0]
 	posCovMsg.pose.pose.orientation.y = quat[1]
 	posCovMsg.pose.pose.orientation.z = quat[2]
-	posCovMsg.pose.pose.orientation.w = quat[3]	
+	posCovMsg.pose.pose.orientation.w = quat[3]
 	posCovMsg.pose.covariance[0:36]=cov
 	pub1.publish(posCovMsg)
 #generates and publishes a message in odometry frame if cam is 0 the message does not come from realsense cov is the covariance matrix
@@ -439,10 +441,10 @@ class Amcl(object):
 		z_pos = posecov.pose.pose.position.z
 		angles = tf.transformations.euler_from_quaternion([posecov.pose.pose.orientation.x, posecov.pose.pose.orientation.y, posecov.pose.pose.orientation.z, posecov.pose.pose.orientation.w])
 		quat = tf.transformations.quaternion_from_euler(0,0,angles[2]) 
-		q_x =   quat[0]   
-		q_y =   quat[1]  
-		q_z =   quat[2]  
-		q_w =   quat[3]
+		q_x =quat[0]
+		q_y =quat[1]
+		q_z =quat[2]
+		q_w =quat[3]
 		writetofile("amcl.txt",stamp,x_pos,y_pos,z_pos,q_x,q_y,q_z,q_w)
 #callback for hector
 class Hector(object):
@@ -452,29 +454,31 @@ class Hector(object):
 		self.tfmaptopose=tfmaptopose
 		self.tfodomtobase=tfodomtobase
 		self.tfbasetolidar=tfbasetolidar
-		angles = tf.transformations.euler_from_quaternion([tfbasetolidar.transform.rotation.x, tfbasetolidar.transform.rotation.y, tfbasetolidar.transform.rotation.z, 		tfbasetolidar.transform.rotation.w])
-		self.yawoff=angles[2]	
+		angles = tf.transformations.euler_from_quaternion([tfbasetolidar.transform.rotation.x, tfbasetolidar.transform.rotation.y, tfbasetolidar.transform.rotation.z, 	tfbasetolidar.transform.rotation.w])
+		self.yawoff=angles[2]
 		self.pub1 = rospy.Publisher('/lpose',PoseWithCovarianceStamped,queue_size=10)
 		self.cor=1
 		if mal == 1:
 			self.cor=100 
 	def writehector(self,posecov):
+		newpos=posecov
+		#writeposetofile("hector_withouttf.txt",newpos,0)
 		#hector already publishes the data in the base_footprint system so transformation with tfbasetolidar is not necessary
-		genandpubposewcovinodomfrombasefootmsg(self.tfodomtobase,posecov,1,[1.5*self.cor,0,0,0,0,0,
-		0,1.5*self.cor,0,0,0,0,
-		0,0,1.5*self.cor,0,0,0,
-		0,0,0,1.5*self.cor,0,0,
-		0,0,0,0,1.5*self.cor,0,
-		0,0,0,0,0,1.5*self.cor],self.pub1)	
 		postr = tf2_geometry_msgs.do_transform_pose(posecov, self.tfmaptopose)
 		postr.header.stamp=posecov.header.stamp
 		angles = tf.transformations.euler_from_quaternion([postr.pose.orientation.x, postr.pose.orientation.y, postr.pose.orientation.z, postr.pose.orientation.w])
-		q = tf.transformations.quaternion_from_euler(angles[0], angles[1],angles[2]-self.yawoff)		
+		q = tf.transformations.quaternion_from_euler(angles[0], angles[1],angles[2]+self.yawoff)
 		postr.pose.orientation.x=q[0]
 		postr.pose.orientation.y=q[1]
 		postr.pose.orientation.z=q[2]
 		postr.pose.orientation.w=q[3]
 		#we need the msg in the format that its in basefootprint but relative to optitrack which we got from above
+		genandpubposewcovinodomfrombasefootmsg(self.tfodomtobase,postr,1,[1.5*self.cor,0,0,0,0,0,
+		0,1.5*self.cor,0,0,0,0,
+		0,0,1.5*self.cor,0,0,0,
+		0,0,0,1.5*self.cor,0,0,
+		0,0,0,0,1.5*self.cor,0,
+		0,0,0,0,0,1.5*self.cor],self.pub1)
 		writeposetofile("hector.txt",postr,0)
 #for gmap amcl karto and mrpt
 class GmapandAmclandKartoandMRPT(object):
@@ -482,7 +486,7 @@ class GmapandAmclandKartoandMRPT(object):
 	def __init__(self,k,tfmaptoodom,tfbasetolidar,mal):
 		self._sub = rospy.Subscriber("/tf",tf2_msgs.msg.TFMessage,self.writegmap)
 		self.pub1 = rospy.Publisher('/lpose',PoseWithCovarianceStamped,queue_size=10) 
-		self._first=0   
+		self._first=0
 		self.tfmaptoodom=tfmaptoodom
 		self.ownmaptoodomtf=TransformStamped() 
 		self.firstinvownmaptoodomtf=TransformStamped() 
@@ -500,10 +504,10 @@ class GmapandAmclandKartoandMRPT(object):
 			removefile(path+"/mrpticpslam.txt")
 			self.filetowrite = "mrpticpslam.txt"
 		else:
-			removefile(path+"/gmap.txt")	 
+			removefile(path+"/gmap.txt")
 			self.filetowrite = "gmap.txt"
 		angles = tf.transformations.euler_from_quaternion([tfbasetolidar.transform.rotation.x, tfbasetolidar.transform.rotation.y, tfbasetolidar.transform.rotation.z, 		tfbasetolidar.transform.rotation.w])
-		self.yawoff=angles[2]		
+		self.yawoff=angles[2]
 		self.cor=1
 		if mal== 3 or mal== 2 or mal == 0:
 			self.cor=1000
@@ -654,6 +658,7 @@ class Rf2o(object):
 		self.cory=[0.0]
 		angles = tf.transformations.euler_from_quaternion([tfbasetolidar.transform.rotation.x, tfbasetolidar.transform.rotation.y, tfbasetolidar.transform.rotation.z, tfbasetolidar.transform.rotation.w])
 		self.yawoff=angles[2]
+	'''
 	def writerf2o(self,posecov):
 		postrans = tf2_geometry_msgs.do_transform_pose(posecov.pose, self.tfbaselidaronlyrot)
 		angles = tf.transformations.euler_from_quaternion([postrans.pose.orientation.x, postrans.pose.orientation.y, postrans.pose.orientation.z, postrans.pose.orientation.w])
@@ -664,7 +669,7 @@ class Rf2o(object):
 		postrans.pose.position.x=postrans.pose.position.x-self.corx[0]
 		postrans.pose.position.y=postrans.pose.position.y-self.cory[0]
 		self.prevyaw=angles[2]
-		quat = tf.transformations.quaternion_from_euler(0,0,angles[2]-self.yawoff) 
+		quat = tf.transformations.quaternion_from_euler(0,0,angles[2]+self.yawoff) 
 		postrans.pose.orientation.x=quat[0]
 		postrans.pose.orientation.y=quat[1]
 		postrans.pose.orientation.z=quat[2]
@@ -678,6 +683,27 @@ class Rf2o(object):
 		0,0,0,0,3,0,
 		0,0,0,0,0,10],self.pub1)
 		writeposetofile(self.filename,pose_transformed2,0)
+	'''
+	def writerf2o(self,posecov):
+		writeposetofile("rf2o_withouttf",posecov.pose,0)
+		postr = tf2_geometry_msgs.do_transform_pose(posecov.pose, self.tfmaptopose)
+		postr.header.stamp=posecov.header.stamp
+		angles = tf.transformations.euler_from_quaternion([postr.pose.orientation.x, postr.pose.orientation.y, postr.pose.orientation.z, postr.pose.orientation.w])
+		q = tf.transformations.quaternion_from_euler(angles[0], angles[1],angles[2]+self.yawoff)
+		postr.pose.orientation.x=q[0]
+		postr.pose.orientation.y=q[1]
+		postr.pose.orientation.z=q[2]
+		postr.pose.orientation.w=q[3]
+		#we need the msg in the format that its in basefootprint but relative to optitrack which we got from above
+		genandpubposewcovinodomfrombasefootmsg(self.tfodomtobase,postr,1,[3,0,0,0,0,0,
+		0,3,0,0,0,0,
+		0,0,3,0,0,0,
+		0,0,0,3,0,0,
+		0,0,0,0,3,0,
+		0,0,0,0,0,3],self.pub1)
+		writeposetofile(self.filename,postr,0)
+
+	
 #for laserscanmatcher adjust it to match rostopic where data is published
 class Laserscanmatcher(object):
 	def __init__(self,tfmaptopose,tfodomtobase,tfbasetolidar):
@@ -689,13 +715,14 @@ class Laserscanmatcher(object):
 		self.tfbasetolidar=tfbasetolidar
 		self.tfbaselidaronlyrot=copy.deepcopy(tfbasetolidar)
 		zerotranstf(self.tfbaselidaronlyrot)
+		angles = tf.transformations.euler_from_quaternion([tfbasetolidar.transform.rotation.x, tfbasetolidar.transform.rotation.y, tfbasetolidar.transform.rotation.z, tfbasetolidar.transform.rotation.w])
+		self.yawoff=angles[2]
 		self.pub1 = rospy.Publisher('/lpose',PoseWithCovarianceStamped,queue_size=10)  
 		self.prevyaw=0
 		self.first=1
 		self.corx=[0.0]
 		self.cory=[0.0]
-		angles = tf.transformations.euler_from_quaternion([tfbasetolidar.transform.rotation.x, tfbasetolidar.transform.rotation.y, tfbasetolidar.transform.rotation.z, tfbasetolidar.transform.rotation.w])
-		self.yawoff=angles[2]
+		'''
 	def writelasma(self,posecov):
 		postrans = tf2_geometry_msgs.do_transform_pose(posecov, self.tfbaselidaronlyrot)
 		angles = tf.transformations.euler_from_quaternion([postrans.pose.orientation.x, postrans.pose.orientation.y, postrans.pose.orientation.z, postrans.pose.orientation.w])
@@ -706,7 +733,7 @@ class Laserscanmatcher(object):
 		postrans.pose.position.x=postrans.pose.position.x-self.corx[0]
 		postrans.pose.position.y=postrans.pose.position.y-self.cory[0]
 		self.prevyaw=angles[2]
-		quat = tf.transformations.quaternion_from_euler(0,0,angles[2]-self.yawoff) 
+		quat = tf.transformations.quaternion_from_euler(0,0,angles[2]+self.yawoff) 
 		postrans.pose.orientation.x=quat[0]
 		postrans.pose.orientation.y=quat[1]
 		postrans.pose.orientation.z=quat[2]
@@ -720,6 +747,25 @@ class Laserscanmatcher(object):
 		0,0,0,0,3,0,
 		0,0,0,0,0,10],self.pub1)
 		writeposetofile(self.filename,pose_transformed2,0)
+		'''
+	def writelasma(self,posecov):
+		postr = tf2_geometry_msgs.do_transform_pose(posecov, self.tfmaptopose)
+		postr.header.stamp=posecov.header.stamp
+		angles = tf.transformations.euler_from_quaternion([postr.pose.orientation.x, postr.pose.orientation.y, postr.pose.orientation.z, postr.pose.orientation.w])
+		q = tf.transformations.quaternion_from_euler(angles[0], angles[1],angles[2]+self.yawoff)
+		postr.pose.orientation.x=q[0]
+		postr.pose.orientation.y=q[1]
+		postr.pose.orientation.z=q[2]
+		postr.pose.orientation.w=q[3]
+		#we need the msg in the format that its in basefootprint but relative to optitrack which we got from above
+		genandpubposewcovinodomfrombasefootmsg(self.tfodomtobase,postr,1,[3,0,0,0,0,0,
+		0,3,0,0,0,0,
+		0,0,3,0,0,0,
+		0,0,0,3,0,0,
+		0,0,0,0,3,0,
+		0,0,0,0,0,3],self.pub1)
+		writeposetofile(self.filename,postr,0)
+		
 #pslam
 class PASlam(object):
 	def __init__(self,tfmaptopose,tfodomtobase):

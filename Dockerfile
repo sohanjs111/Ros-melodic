@@ -90,6 +90,12 @@ RUN apt-get install -y ros-melodic-csm
 WORKDIR $ROS_WORKSPACE/src/
 COPY ./launch/laser_scan_ma.launch ./scan_tools/laser_scan_matcher/demo/
 
+## rqt-graph 
+RUN apt update 
+RUN apt install -y ros-melodic-rqt 
+RUN apt install -y ros-melodic-rqt-graph 
+RUN apt install -y ros-melodic-rqt-common-plugins
+
 # Catkin_make 
 RUN /setup.sh 
 
