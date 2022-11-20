@@ -5,12 +5,10 @@ FROM ros:melodic-ros-core-bionic
 ARG USERNAME=irobot
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
-ARG buildDate = "18.11.2022"
  
-
-LABEL buildDate=$buildDate
+LABEL buildDate="18.11.2022"
 LABEL version="3.0"
-Label name="Sohan Saldanha"
+LABEL name="Sohan Saldanha"
 LABEL maintainer="sohan.saldanha@student.fhws.de"
 
  
@@ -22,7 +20,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && apt-get update \
     && apt-get install -y sudo \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    && chmod 0440 /etc/sudoers.d/$USERNAME
+    && chmod 0770 /etc/sudoers.d/$USERNAME
  
 # install bootstrap tools
 RUN apt-get update && apt-get install --no-install-recommends -y \
