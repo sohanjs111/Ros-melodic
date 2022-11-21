@@ -122,5 +122,5 @@ RUN sudo apt install bc
 WORKDIR $ROS_WORKSPACE/src/
 
 # Catkin_make 
-RUN /setup.sh && rm /setup.sh
+RUN sudo /setup.sh && sudo  rm /setup.sh
  
