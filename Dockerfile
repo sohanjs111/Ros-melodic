@@ -101,3 +101,5 @@ WORKDIR $ROS_WORKSPACE/src/
 
 # Catkin_make 
 RUN /setup.sh && rm /setup.sh
+
+ENV DISPLAY=host.docker.internal:0.0
