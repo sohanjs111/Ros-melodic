@@ -2,6 +2,11 @@
 # generated from docker_images/create_ros_image.Dockerfile.em
 FROM ros:melodic-ros-core-bionic
 
+LABEL buildDate="18.11.2022"
+LABEL version="3.0"
+LABEL name="Sohan Saldanha"
+LABEL maintainer="sohan.saldanha@student.fhws.de"
+
 # install bootstrap tools
 RUN apt-get update && apt-get install --no-install-recommends -y \
     build-essential \
