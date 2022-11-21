@@ -1,6 +1,13 @@
 # Ros-melodic
-Ros melodic docker was installed as per the need of the Bachelor Thesis at FHWS for Evaluating the performance on LiDAR-based Algorithms. 
-To install simple Ros melodic Docker without LiDAR-Based Alogrithms, please switch to simple - branch. If you want to use rqt_graph or xterm use following the steps at [xterm section](#xterm). Its also important to build the container your IP_address in [Step 2](#docker-steps). 
+Ros melodic docker was installed as per the need of the Bachelor Thesis at FHWS for Evaluating the performance on LiDAR-based Algorithms.
+
+If you would like to use the ros-melodic as a root user continue the installation on [master branch](#master). 
+If you would like to use the ros-melodic as a normal user checkout to [irobot branch](#irobot)
+
+To install simple Ros melodic Docker without LiDAR-Based Alogrithms, please git checkout [simple branch](#simple). NOTE THAT YOU WILL BE RUNNING AN USER (irobot). 
+
+If you want to use rqt_graph or xterm use following the steps at [xterm section](#xterm). Its also important to build the container according to your IP_address in [Step 2](#docker-steps). 
+
 
 ## FHWS
 
@@ -48,6 +55,27 @@ For using rqt_graph and xterm, one needs to download [Xlaunch](https://sourcefor
 Now the xterm or rqt_graph should work
 ## Branches 
 ### Master 
+NOTE THAT YOU WILL BE RUNNING A ROOT USER
+```
+git checkout Lidar
+```
+It installs the following for ROS melodic Docker 
+* ROS-TCP-Endpoint for connecting ROS with Unity 
+* Teleop Twist Keyboard
+* xterm
+* rqt_graph
+* Hector slam 
+* Rf2o laser odometry
+* Laser Scan Matcher 
+* shell file to run all the lidar algo
+
+
+
+### Lidar 
+NOTE THAT YOU WILL BE RUNNING A ROOT USER
+```
+git checkout Lidar
+```
 It installs the following for ROS melodic Docker 
 * ROS-TCP-Endpoint for connecting ROS with Unity 
 * Teleop Twist Keyboard
@@ -59,13 +87,21 @@ It installs the following for ROS melodic Docker
 * shell file to run all the lidar algo
 
 ### Simple 
+NOTE THAT YOU WILL BE RUNNING AN USER called ***irobot***.
+```
+git checkout simple
+```
 It installs the following for ROS melodic Docker 
 * ROS-TCP-Endpoint for connecting ROS with Unity 
 * Teleop Twist Keyboard
 * xterm
 * rqt_graph
 
-### Lidar 
+### irobot
+NOTE THAT YOU WILL BE RUNNING AN USER called ***irobot***.
+```
+git checkout irobot
+```
 It installs the following for ROS melodic Docker 
 * ROS-TCP-Endpoint for connecting ROS with Unity 
 * Teleop Twist Keyboard
@@ -75,3 +111,10 @@ It installs the following for ROS melodic Docker
 * Rf2o laser odometry
 * Laser Scan Matcher 
 * shell file to run all the lidar algo
+
+#### Change the username 
+In order to change the user name, go to Dockerfile (line 5)
+```
+ARG USERNAME=irobot
+```
+Replace the *irobot* with the username of your choice. 
