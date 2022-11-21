@@ -116,7 +116,7 @@ WORKDIR $ROS_WORKSPACE/src/evaluation/
 RUN sudo sed -i -e 's/\r$//' ./shell.sh
 
 # install necessary packages for the shell file 
-RUN sudo apt update && apt install ros-melodic-tf2-geometry-msgs
+RUN sudo apt update && sudo apt install ros-melodic-tf2-geometry-msgs
 RUN sudo apt install bc 
 
 WORKDIR $ROS_WORKSPACE/src/
