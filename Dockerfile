@@ -47,7 +47,7 @@ ENV ROS_WORKSPACE=/home/$USERNAME/catkin_ws
 # Copy the packages
 COPY ./ros_packages/ $ROS_WORKSPACE/src/
 RUN git clone https://github.com/Unity-Technologies/ROS-TCP-Endpoint $ROS_WORKSPACE/src/ros_tcp_endpoint -b v0.7.0
- 
+
 # Install teleop
 RUN apt-get install ros-melodic-teleop-twist-keyboard
  
@@ -81,5 +81,7 @@ RUN sudo chown $USERNAME:$USERNAME -R /home/$USERNAME/
 COPY ./set-up-workspace /setup.sh
 RUN sudo sed -i -e 's/\r$//' /setup.sh
 RUN sudo chmod +x /setup.sh && /setup.sh
- 
- ENV DISPLAY=host.docker.internal:0.0
+
+EXPOSE 10000
+
+ENV DISPLAY=host.docker.internal:0.0
