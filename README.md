@@ -70,22 +70,6 @@ It installs the following for ROS melodic Docker
 * shell file to run all the lidar algo
 
 
-
-### Lidar 
-NOTE THAT YOU WILL BE RUNNING A ROOT USER
-```
-git checkout Lidar
-```
-It installs the following for ROS melodic Docker 
-* ROS-TCP-Endpoint for connecting ROS with Unity 
-* Teleop Twist Keyboard
-* xterm
-* rqt_graph
-* Hector slam 
-* Rf2o laser odometry
-* Laser Scan Matcher 
-* shell file to run all the lidar algo
-
 ### Simple 
 NOTE THAT YOU WILL BE RUNNING AN USER called ***irobot***.
 ```
