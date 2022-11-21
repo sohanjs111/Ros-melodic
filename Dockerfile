@@ -82,3 +82,4 @@ COPY ./set-up-workspace /setup.sh
 RUN sudo sed -i -e 's/\r$//' /setup.sh
 RUN sudo chmod +x /setup.sh && /setup.sh
  
+ ENV DISPLAY=host.docker.internal:0.0
