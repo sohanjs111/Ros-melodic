@@ -121,6 +121,13 @@ RUN sudo apt install bc
 
 WORKDIR $ROS_WORKSPACE/src/
 
+
+# Catkin_make 
+RUN /setup.sh 
+
+
+ENV DISPLAY=host.docker.internal:0.0
+
 # Catkin_make 
 #RUN sudo /setup.sh && sudo  rm /setup.sh
  
