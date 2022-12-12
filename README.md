@@ -22,7 +22,7 @@ docker build -t ros-melodic .
 Before you run the conatiner, you need to check for your ip address and replace it with 'your_ip' 
 2. Run the Docker container 
 ```
-docker run -dt --name melodic -e DISPLAY=<your_ip>:0.0 -p 10000:10000 ros-melodic
+docker run -dt --name melodic -p 10000:10000 ros-melodic
 ```
 3. If the Docker conatiner is not running, Only then run the command below
 ```
