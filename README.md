@@ -41,6 +41,7 @@ docker exec -it melodic bash
   docker stop melodic
   ```
 ### Xterm
+#### For Windows
 For using rqt_graph and xterm, one needs to download [Xlaunch](https://sourceforge.net/projects/vcxsrv/) on for windows. Execute VcxSrv before running xterm or rqt_graph in the container. 
 1. Exectue Xlaunch from program files  
 ![Exectue Xlaunch](https://github.com/sohanjs111/Ros-melodic/blob/master/Images/vcxsrv.PNG)
@@ -53,6 +54,26 @@ For using rqt_graph and xterm, one needs to download [Xlaunch](https://sourcefor
 4. Then click Finish. 
 
 Now the xterm or rqt_graph should work
+
+#### For Mac
+X Window System emulator, like [Xquartz](https://www.xquartz.org/) needs to be downloaded for Mac. 
+1. Install XQuartz and then start it from the Applications folder.
+
+2. Activate the option ‘Allow connections from network clients’ in XQuartz settings 
+   ![Activate network clients](https://github.com/sohanjs111/Ros-melodic/blob/master/Images/Xquartz.png)
+
+3. Quit & restart XQuartz (to activate the setting)
+
+Open a Terminal and allow access from localhost 
+```
+xhost + 127.0.0.1
+```
+Inside the container export the DISPLAY;(Not necessary to do this, it is already done in dockerfile)
+```
+export DISPLAY=host.docker.internal:0
+```
+Now the xterm or rqt_graph should work
+
 ## Branches 
 ### Master 
 NOTE THAT YOU WILL BE RUNNING A ROOT USER
