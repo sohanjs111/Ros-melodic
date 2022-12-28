@@ -19,11 +19,19 @@ First time installation run Steps 1 and 2. Later on, Follow only steps 3 to 6
 ```
 docker build -t ros-melodic .
 ```
-Before you run the conatiner, you need to check for your ip address and replace it with 'your_ip' 
-2. Run the Docker container 
+
+2. Run the Docker container:
+  
+  a. Regular container (without volumes)
 ```
 docker run -dt --name melodic -p 10000:10000 ros-melodic
 ```
+  b. Recommended to create two volumes, 'Rosbags' and 'evaluation'
+```
+docker run -dt --name melodic -v Rosbags:/home/irobot/catkin_ws/src/Rosbags -v evaluation:/home/irobot/catkin_ws/src/evaluation/ -p 10000:10000 ros-melodic
+```
+The above volumes can be created on Docker Desktop, however, recommended to mount physical volumes with an actually path. This can be easy done by replacing it with actually path of the volume that is to be mounted.
+
 3. If the Docker conatiner is not running, Only then run the command below
 ```
 docker start melodic
