@@ -86,8 +86,10 @@ COPY ./launch/hectormapping_default.launch ./aros/launch/
 
 ## rf2o 
 RUN sudo git clone https://github.com/MAPIRlab/rf2o_laser_odometry $ROS_WORKSPACE/src/rf2o_laser_odometry
-WORKDIR $ROS_WORKSPACE/src/
-COPY ./launch/rf2o_laser_odometry.launch ./rf2o_laser_odometry/launch/
+WORKDIR $ROS_WORKSPACE/src/rf2o_laser_odometry/
+COPY ./launch/rf2o_laser_odometry.launch ./launch/
+RUN sudo sed -i '295s/if (dcenter > 0.f)/if (std::isfinite(dcenter) \&\& dcenter > 0.f)/' ./src/CLaserOdometry2D.cpp
+RUN sudo sed -i '319s/if (dcenter > 0.f)/if (std::isfinite(dcenter) \&\& dcenter > 0.f)/' ./src/CLaserOdometry2D.cpp
 
 ## Laser Scan 
 RUN sudo git clone https://github.com/CCNYRoboticsLab/scan_tools $ROS_WORKSPACE/src/scan_tools
@@ -95,6 +97,8 @@ RUN sudo apt update
 RUN sudo apt-get install -y ros-melodic-csm
 WORKDIR $ROS_WORKSPACE/src/
 COPY ./launch/laser_scan_ma.launch ./scan_tools/laser_scan_matcher/demo/
+
+
 
 ## rqt-graph 
 RUN sudo apt update 
@@ -106,25 +110,25 @@ RUN sudo apt install -y ros-melodic-rqt-common-plugins
 RUN /setup.sh 
 
 # xterm 
-RUN sudo apt update && sudo apt install xterm
+RUN sudo apt update && sudo apt install -y xterm
 
 # add the evaluation file
 WORKDIR $ROS_WORKSPACE/src/
 RUN mkdir Rosbags
-COPY ./evaluation ./evaluation
+RUN sudo git clone https://github.com/sohanjs111/evaluation.git $ROS_WORKSPACE/src/evaluation
 WORKDIR $ROS_WORKSPACE/src/evaluation/
 RUN sudo sed -i -e 's/\r$//' ./shell.sh
 
+RUN sudo chown $USERNAME:$USERNAME -R /home/$USERNAME/catkin_ws/src/
+
 # install necessary packages for the shell file 
-RUN sudo apt update && sudo apt install ros-melodic-tf2-geometry-msgs
-RUN sudo apt install bc 
+RUN sudo apt update && sudo apt install -y ros-melodic-tf2-geometry-msgs
+RUN sudo apt install -y bc 
 
 WORKDIR $ROS_WORKSPACE/src/
 
-
 # Catkin_make 
 RUN /setup.sh 
-
 
 ENV DISPLAY=host.docker.internal:0.0
 
