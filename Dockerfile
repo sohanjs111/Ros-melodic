@@ -7,7 +7,7 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
  
 LABEL buildDate="18.11.2022"
-LABEL version="3.0"
+LABEL version="4.0"
 LABEL name="Sohan Saldanha"
 LABEL maintainer="sohan.saldanha@student.fhws.de"
 
