@@ -3,7 +3,7 @@
 FROM ros:melodic-ros-core-bionic
 
 LABEL buildDate="18.11.2022"
-LABEL version="3.0"
+LABEL version="4.0"
 LABEL name="Sohan Saldanha"
 LABEL maintainer="sohan.saldanha@student.fhws.de"
 
@@ -71,6 +71,8 @@ COPY ./launch/rf2o_laser_odometry.launch ./rf2o_laser_odometry/launch/
 RUN git clone https://github.com/CCNYRoboticsLab/scan_tools $ROS_WORKSPACE/src/scan_tools
 RUN apt update
 RUN apt-get install -y ros-melodic-csm
+WORKDIR $ROS_WORKSPACE/src/scan_tools/laser_scan_matcher/src/
+COPY ./Extra/laser_scan_matcher.cpp ./laser_scan_matcher.cpp
 WORKDIR $ROS_WORKSPACE/src/
 COPY ./launch/laser_scan_ma.launch ./scan_tools/laser_scan_matcher/demo/
 
@@ -81,7 +83,7 @@ RUN apt install -y ros-melodic-rqt-graph
 RUN apt install -y ros-melodic-rqt-common-plugins
 
 # Catkin_make 
-RUN /setup.sh 
+# RUN /setup.sh 
 
 # xterm 
 RUN apt update && apt install xterm
@@ -100,6 +102,6 @@ RUN apt install bc
 WORKDIR $ROS_WORKSPACE/src/
 
 # Catkin_make 
-RUN /setup.sh && rm /setup.sh
+#RUN /setup.sh && rm /setup.sh
 
 ENV DISPLAY=host.docker.internal:0.0
